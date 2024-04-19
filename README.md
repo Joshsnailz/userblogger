@@ -1,6 +1,6 @@
-# userblogger
+# Userblogger
 
-A new Flutter project.
+A new Flutter project done on behalf of the mobile application development course for the University of Wolverhampton by Joshua Chihozhwa.
 
 ## Getting Started
 

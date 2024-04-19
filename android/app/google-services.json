@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977701026567",
+    "project_id": "userblogger",
+    "storage_bucket": "userblogger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977701026567:android:a14497cdfa0362c3c3a3a2",
+        "android_client_info": {
+          "package_name": "com.chihozhwa.userblogger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe4fFrWR3An9Tg6rejfFThzrWsJCHdnrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

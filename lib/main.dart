@@ -7,12 +7,12 @@ import 'package:userblogger/firebase_options.dart';
 import 'package:userblogger/views/login_view.dart';
 import 'package:userblogger/views/register_view.dart';
 import 'package:userblogger/views/verify_email_view.dart';
-import 'dart:developer' as devtools show log;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-      title: 'User logger',
+  runApp(
+    MaterialApp(
+      title: 'User blogger',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -20,9 +20,11 @@ void main() {
       routes: {
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
-        '/verify/': (context) => const VerifyEmailView(), 
+        '/verify/': (context) => const VerifyEmailView(),
+        '/userblogs/':(context) => const BlogsView(),
       },
-    ),);
+    ),
+  );
 }
 
 class HomePage extends StatelessWidget {
@@ -31,34 +33,32 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-          future: Firebase.initializeApp(
-                    options: DefaultFirebaseOptions.currentPlatform,
-                  ),
-          builder: (context, snapshot) {
-            switch(snapshot.connectionState){
-              case ConnectionState.done:
-                 final user = FirebaseAuth.instance.currentUser;
-                 if(user != null){
-                    if(user.emailVerified){
-                      return const BlogsView();
-                    }else{
-                      return const VerifyEmailView();
-                    }
-                 }else{
-                    return const LoginView();
-                 }
-                
-              default: 
-                return const CircularProgressIndicator();
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null) {
+              if (user.emailVerified) {
+                return const BlogsView();
+              } else {
+                return const VerifyEmailView();
+              }
+            } else {
+              return const LoginView();
             }
-            
-          },
-          
-        );
+
+          default:
+            return const CircularProgressIndicator();
+        }
+      },
+    );
   }
 }
 
-enum MenuAction {logout}
+enum MenuAction { logout }
 
 class BlogsView extends StatefulWidget {
   const BlogsView({super.key});
@@ -75,24 +75,29 @@ class _BlogsViewState extends State<BlogsView> {
         title: const Text('User Blogs'),
         backgroundColor: Colors.blue,
         actions: [
-          PopupMenuButton<MenuAction>( 
+          PopupMenuButton<MenuAction>(
             onSelected: (value) async {
-            switch (value){
-              case MenuAction.logout:
-                final shouldLogout = await showLogoutDialog(context);
-                if (shouldLogout){
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushNamedAndRemoveUntil('/login/', (_) => false,);
-                }
-            }
-          }, itemBuilder:(context) {
-            return [
-              const PopupMenuItem<MenuAction>(
-                value: MenuAction.logout,
-                child:  Text('Logout'),
-              ),
-            ];
-          },)
+              switch (value) {
+                case MenuAction.logout:
+                  final shouldLogout = await showLogoutDialog(context);
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login/',
+                      (_) => false,
+                    );
+                  }
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                const PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout,
+                  child: Text('Logout'),
+                ),
+              ];
+            },
+          )
         ],
       ),
       body: const Text('Userblogger'),
@@ -100,19 +105,26 @@ class _BlogsViewState extends State<BlogsView> {
   }
 }
 
-Future<bool> showLogoutDialog(BuildContext context){
-  return showDialog<bool>(context: context, builder: (context) {
-    return AlertDialog(
-      title: const Text('Sig Out'),
-      content: const Text('Are you sure you want to sign out?'),
-      actions: [
-        TextButton(onPressed: () {
-          Navigator.of(context).pop(false);
-        } , child: const Text('Cancel')),
-        TextButton(onPressed: () {
-          Navigator.of(context).pop(true);
-        } , child: const Text('Logout')),
-      ],
-    );
-  },).then((value) => value ?? false);
+Future<bool> showLogoutDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Sig Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Cancel')),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('Logout')),
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
 }

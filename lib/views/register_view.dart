@@ -34,14 +34,7 @@ class _RegisterViewState extends State<RegisterView> {
         title: const Text('Register'),
         backgroundColor: Colors.blue,
         ),
-        body: FutureBuilder(
-          future: Firebase.initializeApp(
-                    options: DefaultFirebaseOptions.currentPlatform,
-                  ),
-          builder: (context, snapshot) {
-            switch(snapshot.connectionState){
-              case ConnectionState.done:
-                    return Column(
+        body: Column(
                             children: [
                               TextField(
                                 controller: _email,
@@ -78,15 +71,12 @@ class _RegisterViewState extends State<RegisterView> {
                                 };
                                   },
                                 child: const Text('Register'),),
+
+                                TextButton(onPressed: (){
+                                Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
+                              }, child: const Text('Already have an account? Log in here'))
                             ],
-                          ); 
-              default: 
-                return const Text('Loading ...');
-            }
-            
-          },
-          
-        ),
+                          ),
     );
   }
 }

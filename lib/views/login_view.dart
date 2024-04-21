@@ -38,14 +38,7 @@ class _LoginViewState extends State<LoginView> {
         title: const Text('Login'),
         backgroundColor: Colors.blue,
         ),
-        body: FutureBuilder(
-          future: Firebase.initializeApp(
-                    options: DefaultFirebaseOptions.currentPlatform,
-                  ),
-          builder: (context, snapshot) {
-            switch(snapshot.connectionState){
-              case ConnectionState.done:
-                    return Column(
+        body:  Column(
                             children: [
                               TextField(
                                 controller: _email,
@@ -82,15 +75,12 @@ class _LoginViewState extends State<LoginView> {
                                   };
                                 },
                                 child: const Text('Login'),),
+
+                                TextButton(onPressed: (){
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
+                              }, child: const Text('Not yet registered? Register Now!'),)
                             ],
-                          ); 
-              default: 
-                return const Text('Loading ...');
-            }
-            
-          },
-          
-        ),
+                          ),
     );
   }
 }

@@ -65,8 +65,8 @@ class _LoginViewState extends State<LoginView> {
                 final userCredential = await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
-                devtools.log(userCredential.toString());
                 
+
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   userblogsRoute,
                   (route) => false,
@@ -74,6 +74,9 @@ class _LoginViewState extends State<LoginView> {
               } on FirebaseAuthException catch (e) {
                 await showErrorDialog(context, e.message.toString());
                 devtools.log(e.code);
+              }catch (e){
+                await showErrorDialog(context, e.toString());
+                devtools.log(e.toString());
               }
               ;
             },
@@ -91,4 +94,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-

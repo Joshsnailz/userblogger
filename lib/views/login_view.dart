@@ -65,11 +65,13 @@ class _LoginViewState extends State<LoginView> {
                     .signInWithEmailAndPassword(
                         email: email, password: password);
                 devtools.log(userCredential.toString());
+                
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   userblogsRoute,
                   (route) => false,
                 );
               } on FirebaseAuthException catch (e) {
+                await showErrorDialog(context, e.message.toString());
                 devtools.log(e.code);
               }
               ;
@@ -87,4 +89,21 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
+}
+
+Future<void> showErrorDialog(
+  BuildContext context,
+  String text,
+) {
+  return showDialog(context: context, builder: (context) {
+    return AlertDialog(
+      title: const Text('Error!'),
+      content: Text(text),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: const Text('OK'))
+      ],
+    );
+  },);
 }
